@@ -1,6 +1,6 @@
-import React from "react";
-import styled, { css } from "styled-components";
-import UseObserver from "./UseObserver";
+import React, { useRef } from "react";
+import styled from "styled-components";
+import Observer from "./Observer";
 
 const Container = styled.div`
   & section {
@@ -21,30 +21,44 @@ const Articles = styled.div`
 `;
 
 const Article = styled.article`
+  width: 100%;
+  margin: 0 30px;
   padding: 30px;
   background-color: burlywood;
+  opacity: 0;
+  transition: opacity 0.4s ease-in;
+  will-change: opacity;
+
+  &.show {
+    opacity: 1;
+  }
 `;
 
 const App = () => {
-  const obesrverStyles = css`
-    width: 100%;
-    margin: 0 30px;
-  `;
+  const ref = useRef(null);
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
+
+  const observerOptions = {
+    root: null,
+    rootMargin: "-50px",
+    threshold: 1.0,
+  };
 
   return (
     <Container>
       <section>section</section>
       <section>
         <Articles>
-          <UseObserver delay={0.4} styles={obesrverStyles}>
-            <Article>test</Article>
-          </UseObserver>
-          <UseObserver delay={0.55} styles={obesrverStyles}>
-            <Article>test</Article>
-          </UseObserver>
-          <UseObserver delay={0.7} styles={obesrverStyles}>
-            <Article>test</Article>
-          </UseObserver>
+          <Observer childref={ref} options={observerOptions}>
+            <Article ref={ref}>test</Article>
+          </Observer>
+          <Observer childref={ref1} options={observerOptions}>
+            <Article ref={ref1}>test</Article>
+          </Observer>
+          <Observer childref={ref2} options={observerOptions}>
+            <Article ref={ref2}>test</Article>
+          </Observer>
         </Articles>
       </section>
       <section>section</section>
