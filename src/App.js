@@ -1,26 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import styled, { css } from "styled-components";
+import UseObserver from "./UseObserver";
 
-function App() {
+const Container = styled.div`
+  & section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 102vh;
+
+    &:nth-child(2) {
+      background-color: orangered;
+    }
+  }
+`;
+
+const Articles = styled.div`
+  display: flex;
+  width: 60%;
+`;
+
+const Article = styled.article`
+  padding: 30px;
+  background-color: burlywood;
+`;
+
+const App = () => {
+  const obesrverStyles = css`
+    width: 100%;
+    margin: 0 30px;
+  `;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <section>section</section>
+      <section>
+        <Articles>
+          <UseObserver delay={0.4} styles={obesrverStyles}>
+            <Article>test</Article>
+          </UseObserver>
+          <UseObserver delay={0.55} styles={obesrverStyles}>
+            <Article>test</Article>
+          </UseObserver>
+          <UseObserver delay={0.7} styles={obesrverStyles}>
+            <Article>test</Article>
+          </UseObserver>
+        </Articles>
+      </section>
+      <section>section</section>
+    </Container>
   );
-}
+};
 
 export default App;
