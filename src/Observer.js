@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 
 const Observer = ({
   children,
@@ -8,15 +8,15 @@ const Observer = ({
     threshold: 1.0,
   },
 }) => {
-  const target = useRef(null);
   const [elementClass, setElementClass] = useState("");
+  const target = useRef(null);
 
   let element = React.cloneElement(children, {
     className: elementClass,
     ref: target,
   });
 
-  let callback = (entries) => {
+  let callback = useCallback((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         setElementClass("show");
@@ -24,13 +24,19 @@ const Observer = ({
         setElementClass("");
       }
     });
-  };
+  }, []);
 
   let observer = new IntersectionObserver(callback, options);
 
   useEffect(() => {
-    if (target.current) {
-      observer.observe(target.current);
+    // warning fix
+    // target.current podczas wywoływania cleanupu może się zmienić
+    const targetToObserve = target.current;
+
+    if (targetToObserve) {
+      observer.observe(targetToObserve);
+
+      return () => observer.unobserve(targetToObserve);
     }
   });
 
