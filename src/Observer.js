@@ -1,33 +1,40 @@
-import React, { useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 
 const Observer = ({
   children,
-  childref,
   options = {
     root: null,
     rootMargin: "0px",
     threshold: 1.0,
   },
 }) => {
+  const target = useRef(null);
+  const [elementClass, setElementClass] = useState("");
+
+  let element = React.cloneElement(children, {
+    className: elementClass,
+    ref: target,
+  });
+
+  let callback = (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setElementClass("show");
+      } else {
+        setElementClass("");
+      }
+    });
+  };
+
+  let observer = new IntersectionObserver(callback, options);
+
   useEffect(() => {
-    let callback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          childref.current.classList.add("show");
-        } else {
-          childref.current.classList.remove("show");
-        }
-      });
-    };
+    if (target.current) {
+      observer.observe(target.current);
+    }
+  });
 
-    const observer = new IntersectionObserver(callback, options);
-
-    observer.observe(childref.current);
-
-    return () => observer.disconnect();
-  }, [childref, options]);
-
-  return <>{children}</>;
+  return <>{element}</>;
 };
 
 export default Observer;

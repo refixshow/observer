@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 import Observer from "./Observer";
 
@@ -26,38 +26,30 @@ const Article = styled.article`
   padding: 30px;
   background-color: burlywood;
   opacity: 0;
-  transition: opacity 0.4s ease-in;
-  will-change: opacity;
+  transform: translateY(40px);
+  transition: opacity 0.4s ease-in, transform 0.4s ease-in;
+  will-change: opacity transform;
 
   &.show {
     opacity: 1;
+    transform: translateY(0);
   }
 `;
 
 const App = () => {
-  const ref = useRef(null);
-  const ref1 = useRef(null);
-  const ref2 = useRef(null);
-
-  const observerOptions = {
-    root: null,
-    rootMargin: "-50px",
-    threshold: 1.0,
-  };
-
   return (
     <Container>
       <section>section</section>
       <section>
         <Articles>
-          <Observer childref={ref} options={observerOptions}>
-            <Article ref={ref}>test</Article>
+          <Observer>
+            <Article>test</Article>
           </Observer>
-          <Observer childref={ref1} options={observerOptions}>
-            <Article ref={ref1}>test</Article>
+          <Observer>
+            <Article>test</Article>
           </Observer>
-          <Observer childref={ref2} options={observerOptions}>
-            <Article ref={ref2}>test</Article>
+          <Observer>
+            <Article>test</Article>
           </Observer>
         </Articles>
       </section>
