@@ -27,7 +27,7 @@ const Observer = ({
   useEffect(() => {
     const targetToObserve = target.current;
 
-    if (targetToObserve) {
+    if (!!targetToObserve) {
       observer.observe(targetToObserve);
 
       return () => observer.unobserve(targetToObserve);
